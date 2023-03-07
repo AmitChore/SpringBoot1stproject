@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.amit.springboot.model.Employee;
-import net.amit.springboot.repository.EmployeeRepository;
 import net.amit.springboot.service.EmployeeService;
 
 @RestController
@@ -27,6 +26,8 @@ public class EmployeeContoller {
 	Logger logger = LoggerFactory.getLogger(EmployeeContoller.class);
 
 	private EmployeeService employeeService;
+	
+	private static final String get_All_Employee_URL = "http://localhost:8080/api/employees/get";
 
 	public EmployeeContoller(EmployeeService employeeService) {
 		super();
@@ -37,13 +38,13 @@ public class EmployeeContoller {
 	// ctreat employee rest API
 	@PostMapping
 	public ResponseEntity<Employee> saveEmployee(@RequestBody Employee employee) {
-		System.out.println(employee.getFirstName() + employee.getLastName());
+		//System.out.println(employee.getFirstName() + employee.getLastName());
 		return new ResponseEntity<Employee>(employeeService.saveEmployee(employee), HttpStatus.CREATED);
 
 	}
 	// build get all employees rest api
 
-	@GetMapping(path = "/that")
+	@GetMapping("/get")
 	public List<Employee> getAllEmployee() {
 		return employeeService.getAllEmployee();
 	}
@@ -58,7 +59,7 @@ public class EmployeeContoller {
 
 	// build update employee rest api
 	// http://loalhost:8080/api/employees/1
-	@PutMapping("{id}")
+	@PutMapping("/update/{id}")
 	public ResponseEntity<Employee> updateEmployee(@PathVariable("id") long id, @RequestBody Employee employee) {
 		return new ResponseEntity<Employee>(employeeService.updateEmployee(employee, id), HttpStatus.OK);
 	}
@@ -84,7 +85,7 @@ public class EmployeeContoller {
 	 */
 	@GetMapping("/get/{firstName}")
 	public List<Employee> findByfirstName(@PathVariable(name = "firstName") String firstName) {
-		logger.debug(firstName);
+		//logger.debug(firstName);
 		// System.out.println(firstName);
 		return employeeService.findByFirstName(firstName);
 	}

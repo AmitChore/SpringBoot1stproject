@@ -5,6 +5,7 @@ import java.util.List;
 import net.amit.springboot.model.Employee;
 
 public interface EmployeeService {
+	
 	Employee saveEmployee(Employee employee);
 
 	List<Employee> getAllEmployee();

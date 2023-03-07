@@ -1,13 +1,16 @@
 package net.amit.springboot.service.impl;
 
-import java.util.Iterator;
+//import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.data.domain.Sort;
 //import org.springframework.http.HttpStatus;
 ///import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import net.amit.springboot.exception.ResourceAlreadyExistException;
 import net.amit.springboot.exception.ResourceNotFoundException;
 import net.amit.springboot.model.Employee;
 import net.amit.springboot.repository.EmployeeRepository;
@@ -16,21 +19,28 @@ import net.amit.springboot.service.EmployeeService;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
+	@Autowired
 	private EmployeeRepository employeeRepository;
 
-	public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
-		super();
-		this.employeeRepository = employeeRepository;
-
-	}
+//	public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
+//		super();
+//		this.employeeRepository = employeeRepository;
+//
+//	}
 
 	@Override
 	public Employee saveEmployee(Employee employee) {
+		Optional<Employee> savedEmployee = employeeRepository.findById(employee.getId());
+        if(savedEmployee.isPresent()){
+            throw new ResourceAlreadyExistException("id" );
+        }
 		return employeeRepository.save(employee);
 	}
 
 	@Override
 	public List<Employee> getAllEmployee() {
+
+System.out.println("Actual method");
 		return employeeRepository.findAll();
 	}
 
@@ -42,7 +52,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 //	}else {
 //		throw new ResourceNotFoundException("Employee", "id", "id");
 //	}
-
+System.out.println("Actual method");
 		return employeeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee", "Id", "id"));
 	}
 
